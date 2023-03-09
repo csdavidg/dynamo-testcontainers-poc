@@ -1,0 +1,8 @@
+dynamodb:
+  region: us-east-1
+  endpoint: dynamodb.us-east-1.amazonaws.com
+  table: cars
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
