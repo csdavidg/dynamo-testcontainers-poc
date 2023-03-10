@@ -85,6 +85,23 @@ class CarServiceTest {
         }
     }
 
+    @Test
+    fun deleteCarTest() {
+        runBlocking {
+            carService.createCar(Car(name = "Duster", model = 2012, brand = "Renault"))
+            carService.deleteCar("Duster")
+        }
+
+        assertThrows(CarNotFoundException::class.java) {
+            runBlocking {
+                carService.getCarByName("Duster")
+            }
+
+        }.apply {
+            assertTrue(message.equals("The car was not found"));
+        }
+    }
+
     suspend fun createNewTable(): String? {
 
         val attDef = AttributeDefinition {
