@@ -1,7 +1,7 @@
 dynamodb:
   region: us-east-1
   endpoint: dynamodb.us-east-1.amazonaws.com
-  table: cars
+  table: cars_test
 
 spring:
   main:
