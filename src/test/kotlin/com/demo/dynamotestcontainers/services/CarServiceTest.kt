@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
+import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.containers.localstack.LocalStackContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.junit.jupiter.Container
@@ -26,8 +26,8 @@ val LOCALSTACK_DOCKER_IMAGE: DockerImageName = DockerImageName.parse("localstack
 
 @SpringBootTest
 @Testcontainers
-@Import(DynamoDBBeansTestConfig::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ContextConfiguration(classes = [DynamoDBBeansTestConfig::class])
 class CarServiceTest {
 
     companion object {
@@ -81,7 +81,7 @@ class CarServiceTest {
             }
 
         }.apply {
-            assertTrue(message.equals("The car was not found"));
+            assertTrue(message.equals("The car was not found"))
         }
     }
 
@@ -98,7 +98,7 @@ class CarServiceTest {
             }
 
         }.apply {
-            assertTrue(message.equals("The car was not found"));
+            assertTrue(message.equals("The car was not found"))
         }
     }
 
@@ -128,12 +128,11 @@ class CarServiceTest {
 
         dynamoDbClient.use { ddb ->
 
-            var tableArn: String
             val response = ddb.createTable(request)
             ddb.waitUntilTableExists { // suspend call
                 tableName = dynamoDBConfig.table
             }
-            tableArn = response.tableDescription!!.tableArn.toString()
+            val tableArn = response.tableDescription!!.tableArn.toString()
             println("Table $tableArn is ready")
             return tableArn
         }
